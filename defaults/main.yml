@@ -1,0 +1,14 @@
+---
+java_work_dir: "/var/tmp/java"
+java_home: "/opt/java"
+java_base: "{{ java_home|dirname }}"
+java_update_alternatives: False
+java_user: '{{ ansible_user_id }}'
+java_group: '{{ ansible_user_id }}'
+
+java_update_java_alternatives: False
+
+java_jce: True
+
+# fileserver
+fileserver: "https://files-ews-works.s3-us-west-2.amazonaws.com"

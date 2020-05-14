@@ -1,0 +1,10 @@
+# this file maps the source jdk tarball to the jdk version to be installed
+jdk_basename: "jdk1.8.0_251"
+jdk_package: "jdk-8u251-linux-x64.tar.gz"
+jdk_url: "{{ fileserver }}/binaries/java/{{ jdk_package }}"
+
+
+jdk_jce_policy_url_base: "{{ fileserver }}/binaries/java/UnlimitedJCEPolicyJDK8"
+jdk_jce_files:
+  - "US_export_policy.jar"
+  - "local_policy.jar"

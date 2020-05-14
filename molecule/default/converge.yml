@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include ansible-role-java"
+      include_role:
+        name: "ansible-role-java"
+    - name: "Include ansible-role-java and override java_home"
+      include_role:
+        name: "ansible-role-java"
+      vars:
+        java_home: /opt/foo/java

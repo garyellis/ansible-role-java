@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+  - role: ../../ansible-role-java
+    vars:
+      java_home: /opt/foo/java
+      jdk_vers: hotspot-jdk-8u251
+
+- hosts: localhost
+  tasks:
+    - name: validate java is installed
+      command: "{{ java_home }}/bin/java -version"
+
+        

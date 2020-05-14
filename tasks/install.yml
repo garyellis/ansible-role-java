@@ -1,0 +1,61 @@
+---
+- name: jdk load version variables
+  include_vars: "{{ item }}"
+  with_first_found:
+   - "{{ jdk_vers }}.yml"
+   - hotspot-jdk-8u251.yml
+
+- name: jdk create work directory
+  file:
+    path: "{{ java_work_dir }}"
+    state: directory
+
+- name: jdk create java base
+  file:
+    path: "{{ java_base }}"
+    state: directory
+
+- name: jdk download package
+  get_url:
+    url: "{{ jdk_url }}"
+    dest: "{{ java_work_dir }}"
+    validate_certs: no
+
+- name: jdk unpack package
+  unarchive:
+    src: "{{ java_work_dir }}/{{ jdk_package }}"
+    dest: "{{ java_base }}"
+    copy: no
+    creates: "{{ java_base}}/{{ jdk_basename }}"
+
+- name: jdk create java symlink
+  file:
+    src: "{{ java_base }}/{{ jdk_basename }}"
+    dest: "{{ java_home }}"
+    state: link
+
+- name: set java home ownership
+  file:
+    path: "{{ java_base }}/{{ jdk_basename }}"
+    owner: "{{ java_user }}"
+    group: "{{ java_group }}"
+    state: directory
+    recurse: yes
+
+
+- name: jdk set alternatives link
+  alternatives:
+    name: java
+    path: "{{ java_home }}/bin/java"
+    link: /usr/bin/java
+  when: java_update_java_alternatives
+
+
+- name: download java crypto extensions
+  get_url:
+    url: "{{ jdk_jce_policy_url_base }}/{{ item }}"
+    dest: "{{ java_home }}/jre/lib/security"
+    owner: "{{ java_user }}"
+    group: "{{ java_group }}"
+  with_items: "{{ jdk_jce_files }}"
+  when: java_jce
